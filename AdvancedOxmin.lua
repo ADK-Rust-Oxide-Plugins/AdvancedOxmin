@@ -1,55 +1,55 @@
---[[ **************** ]]--
---[[ oxmin - thomasfn ]]--
---[[ **************** ]]--
+--[[ ******************************** ]]--
+--[[  Advanced Oxmin - ADKGamers.com  ]]--
+--[[ ******************************** ]]--
 
 
 -- Define plugin variables
-PLUGIN.Title = "Oxmin"
+PLUGIN.Title = "Advanced Oxmin"
 PLUGIN.Description = "Administration mod"
-PLUGIN.Author = "thomasfn"
-PLUGIN.Version = "1.5"
+PLUGIN.Author = "raziel23x"
+PLUGIN.Version = "0.0.1"
 
--- Load oxmin module
-if (not oxmin) then
-	oxmin = {}
-	oxmin.flagtostr = {}
-	oxmin.strtoflag = {}
-	oxmin.nextflagid = 1
+-- Load Advanced Oxmin module
+if (not advancedoxmin) then
+	advancedoxmin = {}
+	advancedoxmin.flagtostr = {}
+	advancedoxmin.strtoflag = {}
+	advancedoxmin.nextflagid = 1
 end
-function oxmin.AddFlag( name )
-	if (oxmin.strtoflag[ name ]) then return oxmin.strtoflag[ name ] end
-	local id = oxmin.nextflagid
-	oxmin.flagtostr[ id ] = name
-	oxmin.strtoflag[ name ] = id
-	oxmin.nextflagid = oxmin.nextflagid + 1
+function advancedoxmin.AddFlag( name )
+	if (advancedoxmin.strtoflag[ name ]) then return advancedoxmin.strtoflag[ name ] end
+	local id = advancedoxmin.nextflagid
+	advancedoxmin.flagtostr[ id ] = name
+	advancedoxmin.strtoflag[ name ] = id
+	advancedoxmin.nextflagid = advancedoxmin.nextflagid + 1
 	return id
 end
 
 -- Add all default flags
-local FLAG_ALL = oxmin.AddFlag( "all" )
-local FLAG_BANNED = oxmin.AddFlag( "banned" )
-local FLAG_CANKICK = oxmin.AddFlag( "cankick" )
-local FLAG_CANBAN = oxmin.AddFlag( "canban" )
-local FLAG_CANUNBAN = oxmin.AddFlag( "canunban" )
-local FLAG_CANTELEPORT = oxmin.AddFlag( "canteleport" )
-local FLAG_CANGIVE = oxmin.AddFlag( "cangive" )
-local FLAG_CANGOD = oxmin.AddFlag( "cangod" )
-local FLAG_GODMODE = oxmin.AddFlag( "godmode" )
-local FLAG_CANLUA = oxmin.AddFlag( "canlua" )
-local FLAG_CANCALLAIRDROP = oxmin.AddFlag( "cancallairdrop" )
-local FLAG_RESERVED = oxmin.AddFlag( "reserved" )
-local FLAG_CANDESTROY = oxmin.AddFlag( "candestroy" )
+local FLAG_ALL = advancedoxmin.AddFlag( "all" )
+local FLAG_BANNED = advancedoxmin.AddFlag( "banned" )
+local FLAG_CANKICK = advancedoxmin.AddFlag( "cankick" )
+local FLAG_CANBAN = advancedoxmin.AddFlag( "canban" )
+local FLAG_CANUNBAN = advancedoxmin.AddFlag( "canunban" )
+local FLAG_CANTELEPORT = advancedoxmin.AddFlag( "canteleport" )
+local FLAG_CANGIVE = advancedoxmin.AddFlag( "cangive" )
+local FLAG_CANGOD = advancedoxmin.AddFlag( "cangod" )
+local FLAG_GODMODE = advancedoxmin.AddFlag( "godmode" )
+local FLAG_CANLUA = advancedoxmin.AddFlag( "canlua" )
+local FLAG_CANCALLAIRDROP = advancedoxmin.AddFlag( "cancallairdrop" )
+local FLAG_RESERVED = advancedoxmin.AddFlag( "reserved" )
+local FLAG_CANDESTROY = advancedoxmin.AddFlag( "candestroy" )
 
 -- *******************************************
 -- PLUGIN:Init()
--- Initialises the Oxmin plugin
+-- Initialises the Advanced Oxmin plugin
 -- *******************************************
 function PLUGIN:Init()
-	-- Notify console that oxmin is loading
-	print( "Loading Oxmin..." )
+	-- Notify console that Advanced Oxmin is loading
+	print( "Loading Advanced Oxmin..." )
 	
 	-- Load the user datafile
-	self.DataFile = util.GetDatafile( "oxmin" )
+	self.DataFile = util.GetDatafile( "AdvancedOxmin" )
 	local txt = self.DataFile:GetText()
 	if (txt ~= "") then
 		self.Data = json.decode( txt )
@@ -64,11 +64,11 @@ function PLUGIN:Init()
 	print( tostring( cnt ) .. " users are tracked by Oxmin!" )
 	
 	-- Load the config file
-	local b, res = config.Read( "oxmin" )
+	local b, res = config.Read( "AdvancedOxmin" )
 	self.Config = res or {}
 	if (not b) then
 		self:LoadDefaultConfig()
-		if (res) then config.Save( "oxmin" ) end
+		if (res) then config.Save( "AdvancedOxmin" ) end
 	end
 	
 	-- Add chat commands
@@ -78,6 +78,7 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "lua", { FLAG_CANLUA }, self.cmdLua )
 	self:AddOxminChatCommand( "god", { FLAG_CANGOD }, self.cmdGod )
 	self:AddOxminChatCommand( "airdrop", { FLAG_CANCALLAIRDROP }, self.cmdAirdrop )
+	self:AddOxminChatCommand( "notice", { FLAG_CANNOTICE }, self.cmdnotice )	
 	self:AddOxminChatCommand( "give", { FLAG_CANGIVE }, self.cmdGive )
 	self:AddOxminChatCommand( "help", { }, self.cmdHelp )
 	self:AddOxminChatCommand( "who", { }, self.cmdWho )
@@ -86,8 +87,8 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "destroy", { FLAG_CANDESTROY }, self.cmdDestroy )
 	
 	-- Add console commands
-	self:AddCommand( "oxmin", "giveflag", self.ccmdGiveFlag )
-	self:AddCommand( "oxmin", "takeflag", self.ccmdTakeFlag )
+	self:AddCommand( "AdvancedOxmin", "giveflag", self.ccmdGiveFlag )
+	self:AddCommand( "AdvancedOxmin", "takeflag", self.ccmdTakeFlag )
 end
 
 -- *******************************************
@@ -96,7 +97,7 @@ end
 -- *******************************************
 function PLUGIN:LoadDefaultConfig()
 	-- Set default configuration settings
-	self.Config.chatname = "Oxmin"
+	self.Config.chatname = "Advanced Oxmin"
 	self.Config.reservedslots = 5
 	self.Config.showwelcomenotice = true
 	self.Config.welcomenotice = "Welcome to the server %s! Type /help for a list of commands."
@@ -124,10 +125,10 @@ end
 -- Adds an external chat command with flag requirements
 -- *******************************************
 function PLUGIN:AddExternalOxminChatCommand( plugin, name, flagsrequired, callback )
-	-- Get a reference to the oxmin plugin
-	local oxminplugin = plugins.Find( "oxmin" )
+	-- Get a reference to the Advanced Oxmin plugin
+	local oxminplugin = plugins.Find( "AdvancedOxmin" )
 	if (not oxminplugin) then
-		error( "Oxmin plugin file was renamed (don't do this)!" )
+		error( "Advanced Oxmin plugin file was renamed (don't do this)!" )
 		return
 	end
 	
@@ -149,7 +150,7 @@ end
 
 -- *******************************************
 -- PLUGIN:ccmdGiveFlag()
--- Console command callback (oxmin.giveflag <user> <flag>)
+-- Console command callback (advancedoxmin.giveflag <user> <flag>)
 -- *******************************************
 function PLUGIN:ccmdGiveFlag( arg )
 	-- Check the caller has admin or rcon
@@ -168,7 +169,7 @@ function PLUGIN:ccmdGiveFlag( arg )
 	end
 	
 	-- Locate the flag
-	local flagid = oxmin.strtoflag[ arg:GetString( 1 ) ]
+	local flagid = advancedoxmin.strtoflag[ arg:GetString( 1 ) ]
 	if (not flagid) then
 		arg:ReplyWith( "Unknown flag!" )
 		return
@@ -185,7 +186,7 @@ end
 
 -- *******************************************
 -- PLUGIN:ccmdTakeFlag()
--- Console command callback (oxmin.takeflag <user> <flag>)
+-- Console command callback (advancedoxmin.takeflag <user> <flag>)
 -- *******************************************
 function PLUGIN:ccmdTakeFlag( arg )
 	-- Check the caller has admin or rcon
@@ -204,7 +205,7 @@ function PLUGIN:ccmdTakeFlag( arg )
 	end
 	
 	-- Locate the flag
-	local flagid = oxmin.strtoflag[ arg:GetString( 1 ) ]
+	local flagid = advancedoxmin.strtoflag[ arg:GetString( 1 ) ]
 	if (not flagid) then
 		arg:ReplyWith( "Unknown flag!" )
 		return
@@ -226,6 +227,17 @@ end
 function PLUGIN:Save()
 	self.DataFile:SetText( json.encode( self.Data ) )
 	self.DataFile:Save()
+end
+
+-- *******************************************
+-- Broadcasts a chat message
+-- *******************************************
+function PLUGIN:cmdNotice(netuser, cmd, args)
+  local message = table.concat(args, " ")
+  local netusers = rust.GetAllNetUsers()
+  for k,user in pairs(netusers) do
+    rust.Notice(user, message)
+  end
 end
 
 -- *******************************************
@@ -361,7 +373,7 @@ function PLUGIN:GiveFlag( netuser, flag )
 		if (data.Flags[i] == flag) then return false end
 	end
 	table.insert( data.Flags, flag )
-	rust.Notice( netuser, "You now have the flag '" .. oxmin.flagtostr[ flag ] .. "'!" )
+	rust.Notice( netuser, "You now have the flag '" .. advancedoxmin.flagtostr[ flag ] .. "'!" )
 	self:Save()
 	return true
 end
@@ -376,7 +388,7 @@ function PLUGIN:TakeFlag( netuser, flag )
 	for i=1, #data.Flags do
 		if (data.Flags[i] == flag) then
 			table.remove( data.Flags, i )
-			rust.Notice( netuser, "You no longer have the flag '" .. oxmin.flagtostr[ flag ] .. "'!" )
+			rust.Notice( netuser, "You no longer have the flag '" .. advancedoxmin.flagtostr[ flag ] .. "'!" )
 			self:Save()
 			return true
 		end
@@ -585,6 +597,7 @@ function PLUGIN:cmdLua( netuser, args )
 		rust.Notice( netuser, "No output from Lua call." )
 	end
 end
+
 function PLUGIN:cmdAirdrop( netuser, args )
 	rust.Notice( netuser, "Airdrop called!" )
 	rust.CallAirdrop()
