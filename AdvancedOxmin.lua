@@ -77,6 +77,8 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "unban", { FLAG_CANBAN }, self.cmdUnban )
 	self:AddOxminChatCommand( "lua", { FLAG_CANLUA }, self.cmdLua )
 	self:AddOxminChatCommand( "god", { FLAG_CANGOD }, self.cmdGod )
+	self:AddOxminChatCommand( "timeday", { FLAG_CANTIME }, self.cmdTimeday )
+	self:AddOxminChatCommand( "timenight", { FLAG_CANTIME }, self.cmdTimenight )
 	self:AddOxminChatCommand( "airdrop", { FLAG_CANCALLAIRDROP }, self.cmdAirdrop )
 	self:AddOxminChatCommand( "notice", { FLAG_CANNOTICE }, self.cmdnotice )	
 	self:AddOxminChatCommand( "give", { FLAG_CANGIVE }, self.cmdGive )
@@ -602,6 +604,24 @@ end
 function PLUGIN:cmdAirdrop( netuser, args )
 	rust.Notice( netuser, "Airdrop called!" )
 	rust.CallAirdrop()
+end
+
+-- *******************************************
+-- Time functions day and night commands
+-- *******************************************
+function PLUGIN:Timeday( netuser, cmd, args )
+
+    local dayva = "env.time 10"
+    local daytext = "Time set to day "
+    rust.RunServerCommand (dayva)
+    rust.BroadcastChat (daytext)
+end
+function PLUGIN:Timenight( netuser, cmd, args )
+
+    local nightva = "env.time 23"
+    local nighttext = "Time set to night "
+    rust.RunServerCommand (nightva)
+    rust.BroadcastChat (nighttext)
 end
 
 -- ******************************************* 
