@@ -90,8 +90,8 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "destroy", { FLAG_CANDESTROY }, self.cmdDestroy )
 	
 	-- Add console commands
-	self:AddCommand( "AdvancedOxmin", "giveflag", self.ccmdGiveFlag )
-	self:AddCommand( "AdvancedOxmin", "takeflag", self.ccmdTakeFlag )
+	self:AddCommand( "advancedoxmin", "giveflag", self.ccmdGiveFlag )
+	self:AddCommand( "advancedoxmin", "takeflag", self.ccmdTakeFlag )
 end
 
 -- *******************************************
@@ -609,14 +609,14 @@ end
 -- *******************************************
 -- Time functions day and night commands
 -- *******************************************
-function PLUGIN:Timeday( netuser, cmd, args )
+function PLUGIN:cmdTimeday( netuser, cmd, args )
 
     local dayva = "env.time 10"
     local daytext = "Time set to day "
     rust.RunServerCommand (dayva)
     rust.BroadcastChat (daytext)
 end
-function PLUGIN:Timenight( netuser, cmd, args )
+function PLUGIN:cmdTimenight( netuser, cmd, args )
 
     local nightva = "env.time 23"
     local nighttext = "Time set to night "
