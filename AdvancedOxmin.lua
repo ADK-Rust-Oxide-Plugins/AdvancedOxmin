@@ -61,7 +61,7 @@ function PLUGIN:Init()
 	-- Count and output the number of users
 	local cnt = 0
 	for _, _ in pairs( self.Data.Users ) do cnt = cnt + 1 end
-	print( tostring( cnt ) .. " users are tracked by Oxmin!" )
+	print( tostring( cnt ) .. " users are tracked by Advanced Oxmin!" )
 	
 	-- Load the config file
 	local b, res = config.Read( "AdvancedOxmin" )
