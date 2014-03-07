@@ -237,12 +237,12 @@ end
 -- *******************************************
 -- Broadcasts a chat message
 -- *******************************************
-function PLUGIN:cmdNotice( netuser, cmd, args )
-  local message = table.concat( args, " " )
+function PLUGIN:cmdNotice(netuser, cmd, args)
+  local message = table.concat(args, " ")
   local netusers = rust.GetAllNetUsers()
-  local rustnotice = notice.popupall
-  rust.RunServerCommand( rustnotice, message )
- 
+  for k,user in pairs(netusers) do
+    rust.Notice(user, message)
+  end
 end
 
 -- *******************************************
