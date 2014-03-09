@@ -1,13 +1,13 @@
---[[ ******************************** ]]--
---[[  Advanced Oxmin - ADKGamers.com  ]]--
---[[ ******************************** ]]--
+--[[ **************** ]]--
+--[[ oxmin - thomasfn ]]--
+--[[ **************** ]]--
 
 
 -- Define plugin variables
-PLUGIN.Title = "Advanced Oxmin"
+PLUGIN.Title = "Oxmin"
 PLUGIN.Description = "Administration mod"
-PLUGIN.Author = "raziel23x"
-PLUGIN.Version = "0.0.1"
+PLUGIN.Author = "thomasfn"
+PLUGIN.Version = "1.5"
 
 -- Load oxmin module
 if (not oxmin) then
