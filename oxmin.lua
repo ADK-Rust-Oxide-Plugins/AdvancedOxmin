@@ -484,6 +484,9 @@ end
 function PLUGIN:cmdHelp( netuser, args )
 	for i=1, #self.Config.helptext do
 		rust.SendChatToUser( netuser, self.Config.helptext[i] )
+-- *******************************************
+-- ADK HELP COMMANDS ADDITIONS
+-- *******************************************
 		rust.SendChatToUser( netuser, "who - /who Displays the number of players currently online" )
 	end
 	plugins.Call( "SendHelpText", netuser )
