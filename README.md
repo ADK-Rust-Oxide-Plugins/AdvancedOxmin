@@ -1,12 +1,6 @@
-Advanced Oxmin
+Oxmin
 ==============
 
-This is a Rewrite Of Oxmin Adding New Features that is not present in Oxmin but Pressent in the The Basics Plugin
-
-
-
-OXMIN
-==
 
 A flag-based admin tool for Oxide.
 
