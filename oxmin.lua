@@ -445,17 +445,17 @@ function PLUGIN:ModifyDamage( takedamage, damage )
                     local oxmindamagefixed = function()
                         local controllable = netuser.playerClient.controllable
                         local char = controllable:GetComponent( "Character" )
-                        local _FallDamage = cs.gettype( "FallDamage, Assembly-CSharp" )
-                        local _FD = char:GetComponent( _FallDamage )
-                        _FD:ClearInjury( )
+                        local OxminFallDamage = cs.gettype( "FallDamage, Assembly-CSharp" )
+                        local OxminFD = char:GetComponent( OxminFallDamage )
+                        OxminFD:ClearInjury( )
 
-                        local _HumanBodyTakeDamageType = cs.gettype( "HumanBodyTakeDamage, Assembly-CSharp" )
-                        if (_HumanBodyTakeDamageType == nil) then
-                            print( "_HumanBodyTakeDamageType is nil, please report to developer" )
+                        local OxminHumanBodyTakeDamageType = cs.gettype( "HumanBodyTakeDamage, Assembly-CSharp" )
+                        if (OxminHumanBodyTakeDamageType == nil) then
+                            print( "OxminHumanBodyTakeDamageType is nil, please report to developer" )
                             return
                         end
 
-                        local HBTD = char:GetComponent( _HumanBodyTakeDamageType )
+                        local HBTD = char:GetComponent( OxminHumanBodyTakeDamageType )
                         -- local hb = netuser.playerClient.rootControllable.idMain:GetLocal()
                         if (HBTD == nil) then
                             print( "HBTD is nil, please report this to the developer")
