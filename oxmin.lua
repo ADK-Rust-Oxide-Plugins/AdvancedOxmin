@@ -31,8 +31,6 @@ local FLAG_BANNED = oxmin.AddFlag( "banned" )
 local FLAG_CANKICK = oxmin.AddFlag( "cankick" )
 local FLAG_CANBAN = oxmin.AddFlag( "canban" )
 local FLAG_CANUNBAN = oxmin.AddFlag( "canunban" )
-local FLAG_CANNOTICE = oxmin.AddFlag( "cannotice" )
-local FLAG_CANTIME = oxmin.AddFlag( "cantime" )
 local FLAG_CANTELEPORT = oxmin.AddFlag( "canteleport" )
 local FLAG_CANGIVE = oxmin.AddFlag( "cangive" )
 local FLAG_CANGOD = oxmin.AddFlag( "cangod" )
@@ -41,7 +39,14 @@ local FLAG_CANLUA = oxmin.AddFlag( "canlua" )
 local FLAG_CANCALLAIRDROP = oxmin.AddFlag( "cancallairdrop" )
 local FLAG_RESERVED = oxmin.AddFlag( "reserved" )
 local FLAG_CANDESTROY = oxmin.AddFlag( "candestroy" )
+
+
+-- *******************************************
+-- ADK FLAG ADDITIONS
+-- *******************************************
 local FLAG_CANADMINGEAR = oxmin.AddFlag( "canadmingear" )
+local FLAG_CANNOTICE = oxmin.AddFlag( "cannotice" )
+local FLAG_CANTIME = oxmin.AddFlag( "cantime" )
 
 -- *******************************************
 -- PLUGIN:Init()
@@ -80,8 +85,6 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "unban", { FLAG_CANBAN }, self.cmdUnban )
 	self:AddOxminChatCommand( "lua", { FLAG_CANLUA }, self.cmdLua )
 	self:AddOxminChatCommand( "god", { FLAG_CANGOD }, self.cmdGod )
-	self:AddOxminChatCommand( "timeday", { FLAG_CANTIME }, self.cmdTimeday )
-	self:AddOxminChatCommand( "timenight", { FLAG_CANTIME }, self.cmdTimenight )
 	self:AddOxminChatCommand( "airdrop", { FLAG_CANCALLAIRDROP }, self.cmdAirdrop )
 	self:AddOxminChatCommand( "notice", { FLAG_CANNOTICE }, self.cmdnotice )	
 	self:AddOxminChatCommand( "give", { FLAG_CANGIVE }, self.cmdGive )
@@ -90,6 +93,12 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "tp", { FLAG_CANTELEPORT }, self.cmdTeleport )
 	self:AddOxminChatCommand( "bring", { FLAG_CANTELEPORT }, self.cmdBring )
 	self:AddOxminChatCommand( "destroy", { FLAG_CANDESTROY }, self.cmdDestroy )
+	
+-- *******************************************
+-- ADK CHAT COMMANDS ADDITIONS
+-- *******************************************
+	self:AddOxminChatCommand( "timeday", { FLAG_CANTIME }, self.cmdTimeday )
+	self:AddOxminChatCommand( "timenight", { FLAG_CANTIME }, self.cmdTimenight )
 	self:AddOxminChatCommand( "admingear", { FLAG_CANADMINGEAR }, self.cmdAdminGear )
 	self:AddOxminChatCommand( "ahelp", { }, self.cmdahelp )
 	
@@ -234,14 +243,6 @@ end
 function PLUGIN:Save()
 	self.DataFile:SetText( json.encode( self.Data ) )
 	self.DataFile:Save()
-end
-
--- *******************************************
--- Broadcasts a chat message
--- *******************************************
-function PLUGIN:cmdNotice(netuser, cmd, args) 
-		rust.RunServerCommand("notice.popupall " .. '"' .. args[1] .. '"' )
-		rust.SendChatToUser(netuser, "Message Sent: " .. args[1])
 end
 
 -- *******************************************
@@ -636,31 +637,10 @@ function PLUGIN:cmdLua( netuser, args )
 		rust.Notice( netuser, "No output from Lua call." )
 	end
 end
-
 function PLUGIN:cmdAirdrop( netuser, args )
 	rust.Notice( netuser, "Airdrop called!" )
 	rust.CallAirdrop()
 end
-
--- *******************************************
--- Time functions day and night commands
--- *******************************************
-function PLUGIN:cmdTimeday( netuser, cmd, args )
-
-    local dayva = "env.time 10"
-    local daytext = "Time set to day "
-    rust.RunServerCommand (dayva)
-    rust.BroadcastChat (daytext)
-end
-function PLUGIN:cmdTimenight( netuser, cmd, args )
-
-    local nightva = "env.time 23"
-    local nighttext = "Time set to night "
-    rust.RunServerCommand (nightva)
-    rust.BroadcastChat (nighttext)
-end
-
-
 
 local preftype = cs.gettype( "Inventory+Slot+Preference, Assembly-CSharp" )
 --local AddItemAmount = util.FindOverloadedMethod( Rust.PlayerInventory, "AddItemAmount", bf.public_instance, { Rust.ItemDataBlock, System.Int32, preftype } )
@@ -719,6 +699,40 @@ function PLUGIN:cmdDestroy( netuser, args )
 	
 end
 
+-- *******************************************
+-- ADK Gamers Additions
+-- *******************************************
+
+-- *******************************************
+-- Broadcasts a Server Notification 
+-- *******************************************
+function PLUGIN:cmdNotice(netuser, cmd, args) 
+		rust.RunServerCommand("notice.popupall " .. '"' .. args[1] .. '"' )
+		rust.SendChatToUser(netuser, "Message Sent: " .. args[1])
+end
+
+-- *******************************************
+-- Time functions day and night commands
+-- *******************************************
+function PLUGIN:cmdTimeday( netuser, cmd, args )
+
+    local dayva = "env.time 10"
+    local daytext = "Time set to day "
+    rust.RunServerCommand (dayva)
+    rust.BroadcastChat (daytext)
+end
+function PLUGIN:cmdTimenight( netuser, cmd, args )
+
+    local nightva = "env.time 23"
+    local nighttext = "Time set to night "
+    rust.RunServerCommand (nightva)
+    rust.BroadcastChat (nighttext)
+end
+
+-- *******************************************
+--  Admin Gear Command
+-- *******************************************
+
 function PLUGIN:cmdAdminGear( netuser, cmd, args )
 	local InvisibleHelmet =  rust.GetDatablockByName( "Invisible Helmet" )
 	local InvisibleVest = rust.GetDatablockByName( "Invisible Vest" )
@@ -731,6 +745,10 @@ function PLUGIN:cmdAdminGear( netuser, cmd, args )
 	invitem4 = inv:AddItemAmount( InvisibleBoots, 1 )
 	rust.SendChatToUser( netuser, "Admin Gear has been issued" )
 end
+
+-- *******************************************
+-- Admin Help Files
+-- *******************************************
 
 function PLUGIN:cmdahelp( netuser, cmd, args )
 	if(netuser:CanAdmin()) then
