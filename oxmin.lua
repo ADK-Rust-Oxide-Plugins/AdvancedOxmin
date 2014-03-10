@@ -31,8 +31,6 @@ local FLAG_BANNED = oxmin.AddFlag( "banned" )
 local FLAG_CANKICK = oxmin.AddFlag( "cankick" )
 local FLAG_CANBAN = oxmin.AddFlag( "canban" )
 local FLAG_CANUNBAN = oxmin.AddFlag( "canunban" )
-local FLAG_CANNOTICE = oxmin.AddFlag( "cannotice" )
-local FLAG_CANTIME = oxmin.AddFlag( "cantime" )
 local FLAG_CANTELEPORT = oxmin.AddFlag( "canteleport" )
 local FLAG_CANGIVE = oxmin.AddFlag( "cangive" )
 local FLAG_CANGOD = oxmin.AddFlag( "cangod" )
@@ -41,7 +39,6 @@ local FLAG_CANLUA = oxmin.AddFlag( "canlua" )
 local FLAG_CANCALLAIRDROP = oxmin.AddFlag( "cancallairdrop" )
 local FLAG_RESERVED = oxmin.AddFlag( "reserved" )
 local FLAG_CANDESTROY = oxmin.AddFlag( "candestroy" )
-local FLAG_CANADMINGEAR = oxmin.AddFlag( "canadmingear" )
 
 -- *******************************************
 -- PLUGIN:Init()
@@ -80,18 +77,13 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "unban", { FLAG_CANBAN }, self.cmdUnban )
 	self:AddOxminChatCommand( "lua", { FLAG_CANLUA }, self.cmdLua )
 	self:AddOxminChatCommand( "god", { FLAG_CANGOD }, self.cmdGod )
-	self:AddOxminChatCommand( "timeday", { FLAG_CANTIME }, self.cmdTimeday )
-	self:AddOxminChatCommand( "timenight", { FLAG_CANTIME }, self.cmdTimenight )
 	self:AddOxminChatCommand( "airdrop", { FLAG_CANCALLAIRDROP }, self.cmdAirdrop )
-	self:AddOxminChatCommand( "notice", { FLAG_CANNOTICE }, self.cmdnotice )	
 	self:AddOxminChatCommand( "give", { FLAG_CANGIVE }, self.cmdGive )
 	self:AddOxminChatCommand( "help", { }, self.cmdHelp )
 	self:AddOxminChatCommand( "who", { }, self.cmdWho )
 	self:AddOxminChatCommand( "tp", { FLAG_CANTELEPORT }, self.cmdTeleport )
 	self:AddOxminChatCommand( "bring", { FLAG_CANTELEPORT }, self.cmdBring )
 	self:AddOxminChatCommand( "destroy", { FLAG_CANDESTROY }, self.cmdDestroy )
-	self:AddOxminChatCommand( "admingear", { FLAG_CANADMINGEAR }, self.cmdAdminGear )
-	self:AddOxminChatCommand( "ahelp", { }, self.cmdahelp )
 	
 	-- Add console commands
 	self:AddCommand( "oxmin", "giveflag", self.ccmdGiveFlag )
@@ -234,14 +226,6 @@ end
 function PLUGIN:Save()
 	self.DataFile:SetText( json.encode( self.Data ) )
 	self.DataFile:Save()
-end
-
--- *******************************************
--- Broadcasts a chat message
--- *******************************************
-function PLUGIN:cmdNotice(netuser, cmd, args) 
-		rust.RunServerCommand("notice.popupall " .. '"' .. args[1] .. '"' )
-		rust.SendChatToUser(netuser, "Message Sent: " .. args[1])
 end
 
 -- *******************************************
@@ -435,45 +419,10 @@ function PLUGIN:ModifyDamage( takedamage, damage )
 			local netuser = rust.NetUserFromNetPlayer( netplayer )
 			if (netuser) then
 				if (self:HasFlag( netuser, FLAG_GODMODE, true )) then
-                    print("1Got here..."..tostring(damage.status))
-                    --print( "Damage denied" )
-                    damage.amount = 0
-                   
-                    print("2Got here..."..tostring(damage.status))
-
-                    local oxmindamagefixed = function()
-                        local controllable = netuser.playerClient.controllable
-                        local char = controllable:GetComponent( "Character" )
-                        local _FallDamage = cs.gettype( "FallDamage, Assembly-CSharp" )
-                        local _FD = char:GetComponent( _FallDamage )
-                        _FD:ClearInjury( )
-
-                        local _HumanBodyTakeDamageType = cs.gettype( "HumanBodyTakeDamage, Assembly-CSharp" )
-                        if (_HumanBodyTakeDamageType == nil) then
-                            print( "_HumanBodyTakeDamageType is nil, please report to developer" )
-                            return
-                        end
-
-                        local HBTD = char:GetComponent( _HumanBodyTakeDamageType )
-                        -- local hb = netuser.playerClient.rootControllable.idMain:GetLocal()
-                        if (HBTD == nil) then
-                            print( "HBTD is nil, please report this to the developer")
-                            return
-                        end
-                        HBTD:Bandage( 1000.0 )
-                        HBTD:HealOverTime( 30.0 )
-                    end
-
-                    timer.Once( 0.25, oxmindamagefixed )   
-
-					print("3Got here..."..tostring(damage.status))
-
-                    damage.status = LifeStatus.IsAlive
-
-					print("4Got here..."..tostring(damage.status))
-                   
-                    return damage
-                end
+					--print( "Damage denied" )
+					damage.amount = 0
+					return damage
+				end
 			end
 		end
 	end
@@ -636,31 +585,10 @@ function PLUGIN:cmdLua( netuser, args )
 		rust.Notice( netuser, "No output from Lua call." )
 	end
 end
-
 function PLUGIN:cmdAirdrop( netuser, args )
 	rust.Notice( netuser, "Airdrop called!" )
 	rust.CallAirdrop()
 end
-
--- *******************************************
--- Time functions day and night commands
--- *******************************************
-function PLUGIN:cmdTimeday( netuser, cmd, args )
-
-    local dayva = "env.time 10"
-    local daytext = "Time set to day "
-    rust.RunServerCommand (dayva)
-    rust.BroadcastChat (daytext)
-end
-function PLUGIN:cmdTimenight( netuser, cmd, args )
-
-    local nightva = "env.time 23"
-    local nighttext = "Time set to night "
-    rust.RunServerCommand (nightva)
-    rust.BroadcastChat (nighttext)
-end
-
-
 
 local preftype = cs.gettype( "Inventory+Slot+Preference, Assembly-CSharp" )
 --local AddItemAmount = util.FindOverloadedMethod( Rust.PlayerInventory, "AddItemAmount", bf.public_instance, { Rust.ItemDataBlock, System.Int32, preftype } )
@@ -717,37 +645,4 @@ local function TraceEyes( netuser )
 end
 function PLUGIN:cmdDestroy( netuser, args )
 	
-end
-
-function PLUGIN:cmdAdminGear( netuser, cmd, args )
-	local InvisibleHelmet =  rust.GetDatablockByName( "Invisible Helmet" )
-	local InvisibleVest = rust.GetDatablockByName( "Invisible Vest" )
-	local InvisiblePants = rust.GetDatablockByName( "Invisible Pants" )
-	local InvisibleBoots = rust.GetDatablockByName( "Invisible Boots" )
-	local inv = netuser.playerClient.rootControllable.idMain:GetComponent( "Inventory" )
-	invitem1 = inv:AddItemAmount( InvisibleHelmet, 1 )
-	invitem2 = inv:AddItemAmount( InvisibleVest, 1 )
-	invitem3 = inv:AddItemAmount( InvisiblePants, 1 )
-	invitem4 = inv:AddItemAmount( InvisibleBoots, 1 )
-	rust.SendChatToUser( netuser, "Admin Gear has been issued" )
-end
-
-function PLUGIN:cmdahelp( netuser, cmd, args )
-	if(netuser:CanAdmin()) then
-	rust.SendChatToUser( netuser, "The Oxmin Admin commands for this plugin are;" )
-	rust.SendChatToUser( netuser, "kick - /kick 'player name' Requires flag 'cankick' Immediately kicks the target player")
-	rust.SendChatToUser( netuser, "ban - /ban 'player name' Requires flag 'canban' Immediately kicks and bans the target player permanently")
-	rust.SendChatToUser( netuser, "unban - /unban 'player name' Requires flag 'canban' Unbans the target player")
-	rust.SendChatToUser( netuser, "god - /god Requires flag 'cangod' Gives the caller the 'godmode' flag")
-	rust.SendChatToUser( netuser, "airdrop - /airdrop Requires flag 'cancallairdrop' Calls in an airdrop")
-	rust.SendChatToUser( netuser, "give - /give 'item name' 'quantity' Requires flag 'cangive' Gives the caller the specified item")
-	rust.SendChatToUser( netuser, "tp - /tp 'player name' Requires flag 'canteleport' Teleports the caller to the target player")
-	rust.SendChatToUser( netuser, "notice - /notice 'MESSAGE' Requires flag 'cannotice' Sends a server message")
-	rust.SendChatToUser( netuser, "timeday - /timeday Requires flag 'cantime' Changes time of day to day")
-	rust.SendChatToUser( netuser, "timenight - /timenight Requires flag 'cantime' Changes time of day to night")
-
-	else 
-	rust.SendChatToUser(netuser, "Must be logged in Admin to use this command")
-	
-end
 end
