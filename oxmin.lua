@@ -91,6 +91,7 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "bring", { FLAG_CANTELEPORT }, self.cmdBring )
 	self:AddOxminChatCommand( "destroy", { FLAG_CANDESTROY }, self.cmdDestroy )
 	self:AddOxminChatCommand( "admingear", { FLAG_CANADMINGEAR }, self.cmdAdminGear )
+	self:AddOxminChatCommand( "ahelp", { }, self.cmdahelp )
 	
 	-- Add console commands
 	self:AddCommand( "oxmin", "giveflag", self.ccmdGiveFlag )
@@ -729,4 +730,24 @@ function PLUGIN:cmdAdminGear( netuser, cmd, args )
 	invitem3 = inv:AddItemAmount( InvisiblePants, 1 )
 	invitem4 = inv:AddItemAmount( InvisibleBoots, 1 )
 	rust.SendChatToUser( netuser, "Admin Gear has been issued" )
+end
+
+function PLUGIN:cmdahelp( netuser, cmd, args )
+	if(netuser:CanAdmin()) then
+	rust.SendChatToUser( netuser, "The Oxmin Admin commands for this plugin are;" )
+	rust.SendChatToUser( netuser, "kick - /kick 'player name' Requires flag 'cankick' Immediately kicks the target player")
+	rust.SendChatToUser( netuser, "ban - /ban 'player name' Requires flag 'canban' Immediately kicks and bans the target player permanently")
+	rust.SendChatToUser( netuser, "unban - /unban 'player name' Requires flag 'canban' Unbans the target player")
+	rust.SendChatToUser( netuser, "god - /god Requires flag 'cangod' Gives the caller the 'godmode' flag")
+	rust.SendChatToUser( netuser, "airdrop - /airdrop Requires flag 'cancallairdrop' Calls in an airdrop")
+	rust.SendChatToUser( netuser, "give - /give 'item name' 'quantity' Requires flag 'cangive' Gives the caller the specified item")
+	rust.SendChatToUser( netuser, "tp - /tp 'player name' Requires flag 'canteleport' Teleports the caller to the target player")
+	rust.SendChatToUser( netuser, "notice - /notice 'MESSAGE' Requires flag 'cannotice' Sends a server message")
+	rust.SendChatToUser( netuser, "timeday - /timeday Requires flag 'cantime' Changes time of day to day")
+	rust.SendChatToUser( netuser, "timenight - /timenight Requires flag 'cantime' Changes time of day to night")
+
+	else 
+	rust.SendChatToUser(netuser, "Must be logged in Admin to use this command")
+	
+end
 end
