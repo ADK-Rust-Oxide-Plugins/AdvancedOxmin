@@ -436,10 +436,45 @@ function PLUGIN:ModifyDamage( takedamage, damage )
 			local netuser = rust.NetUserFromNetPlayer( netplayer )
 			if (netuser) then
 				if (self:HasFlag( netuser, FLAG_GODMODE, true )) then
-					--print( "Damage denied" )
-					damage.amount = 0
-					return damage
-				end
+                    print("1Got here..."..tostring(damage.status))
+                    --print( "Damage denied" )
+                    damage.amount = 0
+                   
+                    print("2Got here..."..tostring(damage.status))
+
+                    local oxmindamagefixed = function()
+                        local controllable = netuser.playerClient.controllable
+                        local char = controllable:GetComponent( "Character" )
+                        local _FallDamage = cs.gettype( "FallDamage, Assembly-CSharp" )
+                        local _FD = char:GetComponent( _FallDamage )
+                        _FD:ClearInjury( )
+
+                        local _HumanBodyTakeDamageType = cs.gettype( "HumanBodyTakeDamage, Assembly-CSharp" )
+                        if (_HumanBodyTakeDamageType == nil) then
+                            print( "_HumanBodyTakeDamageType is nil, please report to developer" )
+                            return
+                        end
+
+                        local HBTD = char:GetComponent( _HumanBodyTakeDamageType )
+                        -- local hb = netuser.playerClient.rootControllable.idMain:GetLocal()
+                        if (HBTD == nil) then
+                            print( "HBTD is nil, please report this to the developer")
+                            return
+                        end
+                        HBTD:Bandage( 1000.0 )
+                        HBTD:HealOverTime( 30.0 )
+                    end
+
+                    timer.Once( 0.25, oxmindamagefixed )   
+
+					print("3Got here..."..tostring(damage.status))
+
+                    damage.status = LifeStatus.IsAlive
+
+					print("4Got here..."..tostring(damage.status))
+                   
+                    return damage
+                end
 			end
 		end
 	end
