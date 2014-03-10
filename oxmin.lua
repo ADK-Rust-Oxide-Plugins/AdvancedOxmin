@@ -41,6 +41,7 @@ local FLAG_CANLUA = oxmin.AddFlag( "canlua" )
 local FLAG_CANCALLAIRDROP = oxmin.AddFlag( "cancallairdrop" )
 local FLAG_RESERVED = oxmin.AddFlag( "reserved" )
 local FLAG_CANDESTROY = oxmin.AddFlag( "candestroy" )
+local FLAG_CANADMINGEAR = oxmin.AddFlag( "canadmingear" )
 
 -- *******************************************
 -- PLUGIN:Init()
@@ -90,6 +91,7 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "tp", { FLAG_CANTELEPORT }, self.cmdTeleport )
 	self:AddOxminChatCommand( "bring", { FLAG_CANTELEPORT }, self.cmdBring )
 	self:AddOxminChatCommand( "destroy", { FLAG_CANDESTROY }, self.cmdDestroy )
+	self:AddOxminChatCommand( "admingear", { FLAG_CANADMINGEAR }, self.cmdAdminGear )
 	
 	-- Add console commands
 	self:AddCommand( "oxmin", "giveflag", self.ccmdGiveFlag )
@@ -857,4 +859,17 @@ local function TraceEyes( netuser )
 end
 function PLUGIN:cmdDestroy( netuser, args )
 	
+end
+
+function PLUGIN:cmdAdminGear( netuser, cmd, args )
+	local InvisibleHelmet =  rust.GetDatablockByName( "Invisible Helmet" )
+	local InvisibleVest = rust.GetDatablockByName( "Invisible Vest" )
+	local InvisiblePants = rust.GetDatablockByName( "Invisible Pants" )
+	local InvisibleBoots = rust.GetDatablockByName( "Invisible Boots" )
+	local inv = netuser.playerClient.rootControllable.idMain:GetComponent( "Inventory" )
+	invitem1 = inv:AddItemAmount( InvisibleHelmet, 1 )
+	invitem2 = inv:AddItemAmount( InvisibleVest, 1 )
+	invitem3 = inv:AddItemAmount( InvisiblePants, 1 )
+	invitem4 = inv:AddItemAmount( InvisibleBoots, 1 )
+	rust.SendChatToUser( netuser, "Admin Gear has been issued" )
 end
