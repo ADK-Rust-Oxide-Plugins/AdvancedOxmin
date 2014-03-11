@@ -124,7 +124,7 @@ function PLUGIN:LoadDefaultConfig()
 	{
 		"Welcome to the server!",
 		"This server is powered by the Oxide Modding API for Rust.",
-		"Use /who to see how many players are online."
+		"Use /who to see how many players are online.",
 		"Use /ahelp while logged in the server as a admin to see all admin commands"
 	}
 	self.Config.ahelptext =
