@@ -126,21 +126,21 @@ function PLUGIN:LoadDefaultConfig()
 		"Welcome to the server!",
 		"This server is powered by the Oxide Modding API for Rust.",
 		"Use /who to see how many players are online.",
-		"Use /ahelp while logged in the server as a admin to see all admin commands"
+		"Use /ahelp while logged in the server as a admin to see all admin commands."
 	}
 	self.Config.ahelptext =
 	{
 		"The Oxmin Admin commands for this plugin are!",
-		"Use /kick 'player name' Requires flag 'cankick' Immediately kicks the target player",
-		"Use /ban 'player name' Requires flag 'canban' Immediately kicks and bans the target player permanently",
-		"Use /unban 'player name' Requires flag 'canban' Unbans the target player",
-		"Use /god Requires flag 'cangod' Gives the caller the 'godmode' flag",
-		"Use /airdrop Requires flag 'cancallairdrop' Calls in an airdrop",
-		"Use /give 'item name' 'quantity' Requires flag 'cangive' Gives the caller the specified item",
-		"Use /tp 'player name' Requires flag 'canteleport' Teleports the caller to the target player",
-		"Use /notice 'MESSAGE' Requires flag 'cannotice' Sends a server message",
-		"Use /timeday Requires flag 'cantime' Changes time of day to day",
-		"Use /timenight Requires flag 'cantime' Changes time of day to night"
+		"Use /kick 'player name' Requires flag 'cankick' Immediately kicks the target player.",
+		"Use /ban 'player name' Requires flag 'canban' Immediately kicks and bans the target player permanently.",
+		"Use /unban 'player name' Requires flag 'canban' Unbans the target player.",
+		"Use /god Requires flag 'cangod' Gives the caller the 'godmode' flag.",
+		"Use /airdrop Requires flag 'cancallairdrop' Calls in an airdrop.",
+		"Use /give 'item name' 'quantity' Requires flag 'cangive' Gives the caller the specified item.",
+		"Use /tp 'player name' Requires flag 'canteleport' Teleports the caller to the target player.",
+		"Use /notice 'MESSAGE' Requires flag 'cannotice' Sends a server message.",
+		"Use /timeday Requires flag 'cantime' Changes time of day to day.",
+		"Use /timenight Requires flag 'cantime' Changes time of day to night."
 	}
 end
 
@@ -768,7 +768,7 @@ end
 -- *******************************************
 
 function PLUGIN:cmdahelp( netuser, args )
-	for i=1, #self.Config.ahelptext do
+	for i=1, #self.Config.helptext do
 		rust.SendChatToUser( netuser, self.Config.ahelptext[i] )
 	end
 	plugins.Call( "SendHelpText", netuser )
