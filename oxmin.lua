@@ -87,7 +87,7 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "lua", { FLAG_CANLUA }, self.cmdLua )
 	self:AddOxminChatCommand( "god", { FLAG_CANGOD }, self.cmdGod )
 	self:AddOxminChatCommand( "airdrop", { FLAG_CANCALLAIRDROP }, self.cmdAirdrop )
-	self:AddOxminChatCommand( "notice", { FLAG_CANNOTICE }, self.cmdnotice )	
+	
 	self:AddOxminChatCommand( "give", { FLAG_CANGIVE }, self.cmdGive )
 	self:AddOxminChatCommand( "help", { }, self.cmdHelp )
 	self:AddOxminChatCommand( "who", { }, self.cmdWho )
@@ -102,6 +102,7 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "timenight", { FLAG_CANTIME }, self.cmdTimenight )
 	self:AddOxminChatCommand( "admingear", { FLAG_CANADMINGEAR }, self.cmdAdminGear )
 	self:AddOxminChatCommand( "ahelp", { FLAG_CANAHELP }, self.cmdahelp )
+	self:AddOxminChatCommand( "notice", { FLAG_CANNOTICE }, self.cmdnotice )
 	
 	-- Add console commands
 	self:AddCommand( "oxmin", "giveflag", self.ccmdGiveFlag )
@@ -722,9 +723,9 @@ end
 -- *******************************************
 -- Broadcasts a Server Notification 
 -- *******************************************
-function PLUGIN:cmdNotice(netuser, cmd, args) 
-		rust.RunServerCommand("notice.popupall " .. '"' .. args[1] .. '"' )
-		rust.SendChatToUser(netuser, "Message Sent: " .. args[1])
+function PLUGIN:cmdNotice( netuser, cmd, args ) 
+		rust.RunServerCommand( "notice.popupall " .. '"' .. args[1] .. '"' )
+		rust.SendChatToUser( netuser, "Message Sent: " .. args[1] )
 end
 
 -- *******************************************
