@@ -127,6 +127,20 @@ function PLUGIN:LoadDefaultConfig()
 		"Use /who to see how many players are online."
 		"Use /ahelp while logged in the server as a admin to see all admin commands"
 	}
+	self.Config.ahelptext =
+	{
+		"The Oxmin Admin commands for this plugin are;",
+		"/kick 'player name' Requires flag 'cankick' Immediately kicks the target player",
+		"/ban 'player name' Requires flag 'canban' Immediately kicks and bans the target player permanently",
+		"/unban 'player name' Requires flag 'canban' Unbans the target player",
+		"/god Requires flag 'cangod' Gives the caller the 'godmode' flag",
+		"/airdrop Requires flag 'cancallairdrop' Calls in an airdrop",
+		"/give 'item name' 'quantity' Requires flag 'cangive' Gives the caller the specified item",
+		"/tp 'player name' Requires flag 'canteleport' Teleports the caller to the target player",
+		"/notice 'MESSAGE' Requires flag 'cannotice' Sends a server message",
+		"/timeday Requires flag 'cantime' Changes time of day to day",
+		"/timenight Requires flag 'cantime' Changes time of day to night"
+	}
 end
 
 -- *******************************************
@@ -752,18 +766,9 @@ end
 -- Admin Help Files
 -- *******************************************
 
-function PLUGIN:cmdahelp( netuser, cmd, args )
-	rust.SendChatToUser( netuser, "The Oxmin Admin commands for this plugin are;" )
-	rust.SendChatToUser( netuser, "kick - /kick 'player name' Requires flag 'cankick' Immediately kicks the target player")
-	rust.SendChatToUser( netuser, "ban - /ban 'player name' Requires flag 'canban' Immediately kicks and bans the target player permanently")
-	rust.SendChatToUser( netuser, "unban - /unban 'player name' Requires flag 'canban' Unbans the target player")
-	rust.SendChatToUser( netuser, "god - /god Requires flag 'cangod' Gives the caller the 'godmode' flag")
-	rust.SendChatToUser( netuser, "airdrop - /airdrop Requires flag 'cancallairdrop' Calls in an airdrop")
-	rust.SendChatToUser( netuser, "give - /give 'item name' 'quantity' Requires flag 'cangive' Gives the caller the specified item")
-	rust.SendChatToUser( netuser, "tp - /tp 'player name' Requires flag 'canteleport' Teleports the caller to the target player")
-	rust.SendChatToUser( netuser, "notice - /notice 'MESSAGE' Requires flag 'cannotice' Sends a server message")
-	rust.SendChatToUser( netuser, "timeday - /timeday Requires flag 'cantime' Changes time of day to day")
-	rust.SendChatToUser( netuser, "timenight - /timenight Requires flag 'cantime' Changes time of day to night")
-
-	
+function PLUGIN:cmdahelp( netuser, args )
+	for i=1, #self.Config.ahelptext do
+		rust.SendChatToUser( netuser, self.Config.ahelptext[i] )
+	end
+	plugins.Call( "SendHelpText", netuser )
 end
