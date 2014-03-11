@@ -47,6 +47,7 @@ local FLAG_CANDESTROY = oxmin.AddFlag( "candestroy" )
 local FLAG_CANADMINGEAR = oxmin.AddFlag( "canadmingear" )
 local FLAG_CANNOTICE = oxmin.AddFlag( "cannotice" )
 local FLAG_CANTIME = oxmin.AddFlag( "cantime" )
+local FLAG_CANAHELP = oxmin.AddFlag( "ahelp" )
 
 -- *******************************************
 -- PLUGIN:Init()
@@ -100,7 +101,7 @@ function PLUGIN:Init()
 	self:AddOxminChatCommand( "timeday", { FLAG_CANTIME }, self.cmdTimeday )
 	self:AddOxminChatCommand( "timenight", { FLAG_CANTIME }, self.cmdTimenight )
 	self:AddOxminChatCommand( "admingear", { FLAG_CANADMINGEAR }, self.cmdAdminGear )
-	self:AddOxminChatCommand( "ahelp", { }, self.cmdahelp )
+	self:AddOxminChatCommand( "ahelp", { FLAG_CANAHELP }, self.cmdahelp )
 	
 	-- Add console commands
 	self:AddCommand( "oxmin", "giveflag", self.ccmdGiveFlag )
@@ -124,6 +125,7 @@ function PLUGIN:LoadDefaultConfig()
 		"Welcome to the server!",
 		"This server is powered by the Oxide Modding API for Rust.",
 		"Use /who to see how many players are online."
+		"Use /ahelp while logged in the server as a admin to see all admin commands"
 	}
 end
 
@@ -484,10 +486,6 @@ end
 function PLUGIN:cmdHelp( netuser, args )
 	for i=1, #self.Config.helptext do
 		rust.SendChatToUser( netuser, self.Config.helptext[i] )
--- *******************************************
--- ADK HELP COMMANDS ADDITIONS
--- *******************************************
-		rust.SendChatToUser( netuser, "who - /who Displays the number of players currently online" )
 	end
 	plugins.Call( "SendHelpText", netuser )
 end
@@ -755,7 +753,6 @@ end
 -- *******************************************
 
 function PLUGIN:cmdahelp( netuser, cmd, args )
-	if(netuser:CanAdmin()) then
 	rust.SendChatToUser( netuser, "The Oxmin Admin commands for this plugin are;" )
 	rust.SendChatToUser( netuser, "kick - /kick 'player name' Requires flag 'cankick' Immediately kicks the target player")
 	rust.SendChatToUser( netuser, "ban - /ban 'player name' Requires flag 'canban' Immediately kicks and bans the target player permanently")
@@ -768,8 +765,5 @@ function PLUGIN:cmdahelp( netuser, cmd, args )
 	rust.SendChatToUser( netuser, "timeday - /timeday Requires flag 'cantime' Changes time of day to day")
 	rust.SendChatToUser( netuser, "timenight - /timenight Requires flag 'cantime' Changes time of day to night")
 
-	else 
-	rust.SendChatToUser(netuser, "Must be logged in Admin to use this command")
 	
-end
 end
