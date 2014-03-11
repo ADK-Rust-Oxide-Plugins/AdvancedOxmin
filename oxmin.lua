@@ -723,7 +723,8 @@ end
 -- *******************************************
 -- Broadcasts a Server Notification 
 -- *******************************************
-function PLUGIN:cmdNotice( netuser, cmd, args ) 
+function PLUGIN:cmdNotice( netuser, args )
+		table.concat(args," ")
 		rust.Notice( netuser, args[1] )
 		rust.SendChatToUser ( netuser, "Message Sent:" .. args[1] )
 end
