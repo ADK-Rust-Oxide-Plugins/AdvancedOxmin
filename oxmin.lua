@@ -724,8 +724,8 @@ end
 -- Broadcasts a Server Notification 
 -- *******************************************
 function PLUGIN:cmdNotice( netuser, cmd, args ) 
-		rust.RunServerCommand( "notice.popupall " .. '"' .. args[1] .. '"' )
-		rust.SendChatToUser( netuser, "Message Sent: " .. args[1] )
+		rust.RunServerCommand ( "notice.popupall" .. '"' .. args[1] .. '"' )
+		rust.SendChatToUser ( netuser, "Message Sent:" .. args[1] )
 end
 
 -- *******************************************
@@ -734,14 +734,14 @@ end
 function PLUGIN:cmdTimeday( netuser, cmd, args )
 
     local dayva = "env.time 10"
-    local daytext = "Time set to day "
+    local daytext = "Time set to day"
     rust.RunServerCommand (dayva)
     rust.BroadcastChat (daytext)
 end
 function PLUGIN:cmdTimenight( netuser, cmd, args )
 
     local nightva = "env.time 23"
-    local nighttext = "Time set to night "
+    local nighttext = "Time set to night"
     rust.RunServerCommand (nightva)
     rust.BroadcastChat (nighttext)
 end
