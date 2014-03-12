@@ -725,7 +725,7 @@ end
 -- *******************************************
 function PLUGIN:cmdNotice( netuser, args )
 		table.concat(args," ")
-		rust.Notice( netuser, args[1] )
+		rust.Notice( netuser, .. '"' .. args[1] .. '"' )
 		rust.SendChatToUser ( netuser, "Message Sent:" .. args[1] )
 end
 
