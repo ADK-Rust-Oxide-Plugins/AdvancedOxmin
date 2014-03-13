@@ -725,8 +725,14 @@ end
 -- *******************************************
 function PLUGIN:cmdNotice( netuser, args )
 		table.concat(args," ")
+		local allnetusers = rust.GetAllNetUsers()
+		if (allnetusers) then
+		for i=1, #allnetusers do
+            local netuser = allnetusers[i]
 		rust.Notice( netuser, args[1] )
 		rust.SendChatToUser ( netuser, "Message Sent:" .. args[1] )
+		end
+	end
 end
 
 -- *******************************************
