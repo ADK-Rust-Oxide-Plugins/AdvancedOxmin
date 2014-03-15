@@ -726,14 +726,16 @@ end
 function PLUGIN:cmdNotice( netuser, args )
 		table.concat(args," ")
 		local allnetusers = rust.GetAllNetUsers()
+		
 		if (allnetusers) then
 		for i=1, #allnetusers do
             local netuser = allnetusers[i]
-		rust.Notice( netuser, args[1] )
-		rust.SendChatToUser ( netuser, "Message Sent:" .. args[1] )
+			local whole_msg = table.concat(args," ")
+		rust.Notice( netuser, whole_msg )
+		rust.SendChatToUser ( netuser, "Message Sent:" .. whole_msg )
+				end
+			end
 		end
-	end
-end
 
 -- *******************************************
 -- Time functions day and night commands
