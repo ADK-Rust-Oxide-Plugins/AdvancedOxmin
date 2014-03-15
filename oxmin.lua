@@ -724,18 +724,21 @@ end
 -- Broadcasts a Server Notification 
 -- *******************************************
 function PLUGIN:cmdNotice( netuser, args )
-		table.concat(args," ")
-		local allnetusers = rust.GetAllNetUsers()
-		
-		if (allnetusers) then
-		for i=1, #allnetusers do
-            local netuser = allnetusers[i]
-			local whole_msg = table.concat(args," ")
-		rust.Notice( netuser, whole_msg )
-		rust.SendChatToUser ( netuser, "Message Sent:" .. whole_msg )
-				end
-			end
-		end
+
+	if (not args[1]) then
+		rust.Notice( netuser, "Syntax: /notice Message" )
+		return
+	end
+  local allnetusers = rust.GetAllNetUsers()
+  if allnetusers then
+    for i=1, #allnetusers do
+      local netuser = allnetusers[i]
+	  local notice_msg = table.concat(args," ")
+      rust.Notice(netuser, notice_msg)
+      rust.SendChatToUser(netuser, "Message Sent:" .. notice_msg)
+    end
+  end
+end
 
 -- *******************************************
 -- Time functions day and night commands
