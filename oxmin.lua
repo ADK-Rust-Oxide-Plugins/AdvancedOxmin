@@ -431,23 +431,12 @@ function PLUGIN:ModifyDamage( takedamage, damage )
 	end
 	local controllable = takedamage:GetComponent( "Controllable" )
 	if (not controllable) then return end
-	--print( controllable )
 	local netuser = controllable.playerClient.netUser
 	if (not netuser) then return error( "Failed to get net user (ModifyDamage)" ) end
 	local char = rust.GetCharacter( netuser )
 	if (not char) then return error( "Failed to get Character (ModifyDamage)" ) end
-	--local char = obj:GetComponent( "Character" )
 	if (char) then
 		local ct = char:GetType()
-		--[[if (ct.Name == "DamageBeing") then
-			char = char.character
-			print( "Hacky fix, " .. ct.Name .. " is now " .. char:GetType().Name )
-			if (char:GetType().Name == "DamageBeing") then
-				print( "The hacky fix didn't work, it's still a DamageBeing!" )
-				return
-			end
-		end]]
-		--print( ct )
 		local netplayer = char.networkViewOwner
 		if (netplayer) then
 			local netuser = rust.NetUserFromNetPlayer( netplayer )
@@ -459,21 +448,19 @@ function PLUGIN:ModifyDamage( takedamage, damage )
                    
                     print("2Got here..."..tostring(damage.status))
 
-                    local oxmindamagefixed = function()
-                        local controllable = netuser.playerClient.controllable
-                        local char = controllable:GetComponent( "Character" )
-                        local OxminFallDamage = cs.gettype( "FallDamage, Assembly-CSharp" )
-                        local OxminFD = char:GetComponent( OxminFallDamage )
-                        OxminFD:ClearInjury( )
-
-                        local OxminHumanBodyTakeDamageType = cs.gettype( "HumanBodyTakeDamage, Assembly-CSharp" )
+						local oxmindamagefixed = function()
+						local controllable = netuser.playerClient.controllable
+						local char = controllable:GetComponent( "Character" )
+						local OxminFallDamage = cs.gettype( "FallDamage, Assembly-CSharp" )
+						local OxminFD = char:GetComponent( OxminFallDamage )
+						OxminFD:ClearInjury( )
+						local OxminHumanBodyTakeDamageType = cs.gettype( "HumanBodyTakeDamage, Assembly-CSharp" )
                         if (OxminHumanBodyTakeDamageType == nil) then
                             print( "OxminHumanBodyTakeDamageType is nil, please report to developer" )
                             return
                         end
 
                         local HBTD = char:GetComponent( OxminHumanBodyTakeDamageType )
-                        -- local hb = netuser.playerClient.rootControllable.idMain:GetLocal()
                         if (HBTD == nil) then
                             print( "HBTD is nil, please report this to the developer")
                             return
@@ -483,11 +470,8 @@ function PLUGIN:ModifyDamage( takedamage, damage )
                     end
 
                     timer.Once( 0.25, oxmindamagefixed )   
-
 					print("3Got here..."..tostring(damage.status))
-
                     damage.status = LifeStatus.IsAlive
-
 					print("4Got here..."..tostring(damage.status))
                    
                     return damage
